@@ -36,7 +36,7 @@ export class AddCategoryComponent implements OnDestroy {
 
   public createForm = this.formBuilder.group<CreateCategoryFormContent>({
     name: this.formBuilder.control('', { nonNullable: true, validators: [Validators.required] }),
-   // creationDate: this.formBuilder.control<Date | null>(null, { nonNullable: false }), // Permet `null`
+    // creationDate: this.formBuilder.control<Date | null>(null, { nonNullable: false }), // Permet `null`
     parentCategory: this.formBuilder.control<string | null>(null, { nonNullable: false }) // Permet `null`
     //childCategories: this.formBuilder.control<Category[] | null>(null, { nonNullable: false }) // Permet `null`
   });
@@ -45,7 +45,7 @@ export class AddCategoryComponent implements OnDestroy {
       this.isCreating = false;
       if(this.categoryService.addCat().status === "OK") {
         //   this.categoryService.getAll();
-      //  this.categoryService.show('Song created with success', "SUCCESS");
+        //  this.categoryService.show('Song created with success', "SUCCESS");
         this.router.navigate(['/']);
       } else if (this.categoryService.addCat().status === "ERROR") {
         //  this.toastService.show('Error occured when creating song, please try again', "DANGER");

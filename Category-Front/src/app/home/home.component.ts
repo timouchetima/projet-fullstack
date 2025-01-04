@@ -63,6 +63,10 @@ export class HomeComponent implements OnInit {
     console.log('Navigating to edit with category:', category); // Log category being passed
     this.router.navigate(['/edit-category', category.id]); // Or with state: { state: { category } }
   }
+  navigateToDetails(category: Category): void {
+    console.log('Navigating to detail with category:', category);
+    this.router.navigate(['/category-details', category.id]);  // Navigation vers la page des détails
+  }
 
 
 

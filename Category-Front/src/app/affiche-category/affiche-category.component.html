@@ -1,0 +1,33 @@
+<div *ngIf="categoryData" class="container py-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="text-center mb-4">Category Details</h1>
+
+      <!-- Category Info Section -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <p><strong>ID:</strong> {{ categoryData.id }}</p>
+          <p><strong>Name:</strong> {{ categoryData.name }}</p>
+          <p><strong>Creation Date:</strong> {{ categoryData.creationDate | date }}</p>
+
+          <!-- Root Category Message -->
+          <div *ngIf="categoryData.rootCategory" class="alert alert-info">
+            This is a Root Category
+          </div>
+
+          <!-- Child Categories Section -->
+          <div *ngIf="categoryData.childCategories && categoryData.childCategories.length > 0">
+            <h5 class="mt-4">Child Categories:</h5>
+            <ul class="list-group">
+              <li *ngFor="let child of categoryData.childCategories" class="list-group-item">
+                {{ child.name }} (ID: {{ child.id }})
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p *ngIf="!categoryData" class="text-center">Loading category...</p>

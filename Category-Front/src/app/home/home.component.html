@@ -8,8 +8,8 @@
       <p class="card-text">Parent Category: {{ cat.parentCategory?.id|| 'N/A' }}</p>
       <p class="card-text">Is Root Category: {{ cat.parentCategory ? 'No' : 'Yes' }}</p>
 
-          <button class="btn btn-danger" (click)="navigateToEdit(cat)">Éditer</button>
-
+      <button class="btn btn-danger" (click)="navigateToEdit(cat)">Éditer</button>
+      <button class="btn btn-danger" (click)="navigateToDetails(cat)">Detail</button>
       <button class="btn btn-danger" (click)="cat.id ? deleteCategory(cat.id) : null">Delete</button>
     </div>
   </div>

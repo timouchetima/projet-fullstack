@@ -2,18 +2,18 @@
   <div class="w-75">
     <h1 class="mb-3 text-start">Ajouter Catégories</h1>
     <form id="createForm" (ngSubmit)="create()" [formGroup]="createForm">
-        <div class="form-floating mb-3 text-secondary">
-          <input type="text" class="form-control" id="name"
-                 [class.is-valid]="createForm.get('name')?.valid"
-                 [class.is-invalid]="createForm.get('name')?.dirty && createForm.get('name')?.invalid"
-                 placeholder="Nom" formControlName="name"/>
-          <label for="name">Nom</label>
-          @if (createForm.get('name')?.dirty && createForm.get('name')?.hasError('required')) {
-            <div class="invalid-feedback">
-              Nom est obligatoire
-            </div>
-          }
-        </div>
+      <div class="form-floating mb-3 text-secondary">
+        <input type="text" class="form-control" id="name"
+               [class.is-valid]="createForm.get('name')?.valid"
+               [class.is-invalid]="createForm.get('name')?.dirty && createForm.get('name')?.invalid"
+               placeholder="Nom" formControlName="name"/>
+        <label for="name">Nom</label>
+        @if (createForm.get('name')?.dirty && createForm.get('name')?.hasError('required')) {
+          <div class="invalid-feedback">
+            Nom est obligatoire
+          </div>
+        }
+      </div>
       <div class="form-floating mb-3 text-secondary">
         <select class="form-select"
                 id="parentCategory"
@@ -39,5 +39,5 @@
         </button>
       </div>
     </form>
-</div>
+  </div>
 </div>

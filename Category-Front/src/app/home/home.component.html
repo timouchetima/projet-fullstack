@@ -1,0 +1,16 @@
+<h1 class="mn-3">Category</h1>
+<div class="d-flex flex-wrap">
+  <div *ngFor="let cat of allCategory$ | async" class="card mt-0 mb-4 ms-0 me-4">
+    <div class="card-body">
+      <h5 class="card-title">{{ cat.id }}</h5>
+      <h5 class="card-title">{{ cat.name }}</h5>
+      <p class="card-text">Creation Date: {{ cat.creationDate | date }}</p>
+      <p class="card-text">Parent Category: {{ cat.parentCategory?.id|| 'N/A' }}</p>
+      <p class="card-text">Is Root Category: {{ cat.parentCategory ? 'No' : 'Yes' }}</p>
+
+          <button class="btn btn-danger" (click)="navigateToEdit(cat)">Éditer</button>
+
+      <button class="btn btn-danger" (click)="cat.id ? deleteCategory(cat.id) : null">Delete</button>
+    </div>
+  </div>
+</div>

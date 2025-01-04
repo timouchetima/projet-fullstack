@@ -1,0 +1,36 @@
+<p>edit-category works!</p>
+<div class="flex-column d-flex align-items-center">
+  <div class="w-75">
+    <h1 class="mb-3 text-start">Modifier Catégorie</h1>
+    <form (ngSubmit)="submit()" [formGroup]="editForm">
+      <div class="form-floating mb-3 text-secondary">
+        <input type="text" class="form-control" id="name"
+               [class.is-valid]="editForm.get('name')?.valid"
+               [class.is-invalid]="editForm.get('name')?.dirty && editForm.get('name')?.invalid"
+               placeholder="Nom" formControlName="name"/>
+        <label for="name">Nom</label>
+        <div *ngIf="editForm.get('name')?.dirty && editForm.get('name')?.hasError('required')" class="invalid-feedback">
+          Nom est obligatoire
+        </div>
+      </div>
+
+      <div class="form-floating mb-3 text-secondary">
+        <select class="form-select"
+                id="parentCategory"
+                formControlName="parentCategory"
+                [class.is-valid]="editForm.get('parentCategory')?.valid"
+                [class.is-invalid]="editForm.get('parentCategory')?.dirty && editForm.get('parentCategory')?.invalid">
+          <option value="">Aucune catégorie parente</option>
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+        <label for="parentCategory">Catégorie Parent</label>
+      </div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary" [disabled]="editForm.invalid" type="submit">
+          <div>Modifier</div>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -21,9 +21,17 @@ export class CategoryService {
     signal(State.Builder<Category[], HttpErrorResponse>().forInit().build());
   getAllCat = computed(() => this.getAll$());
 
-  add(category: Partial<Category>): Observable<Category> {
-    return this.http.post<Category>(`${this.apiUrl}/create`, category);
+  add(category: Category): void {
+    const formData = new FormData();
+    formData.append('name', category.name!);
+    formData.append('parentCategory', category.parentCategory ? JSON.stringify(category.parentCategory) : '');
+
+    this.http.post<Category>(`${this.apiUrl}/create`, formData).subscribe({
+      next: savedCategory => this.add$.set(State.Builder<Category, HttpErrorResponse>().forSuccess(savedCategory).build()),
+      error: err => this.add$.set(State.Builder<Category, HttpErrorResponse>().forError(err).build()),
+    });
   }
+
 
   reset(): void {
     this.add$.set(State.Builder<Category, HttpErrorResponse>().forInit().build());

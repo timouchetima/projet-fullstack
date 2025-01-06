@@ -1,6 +1,6 @@
 
 import { Injectable, inject, WritableSignal, signal, computed } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Category } from './model/category.model';
 import { State } from './model/state.model';
 import { environment } from '../../environments/environment';
@@ -55,7 +55,7 @@ export class CategoryService {
   }
 
   getCategoryById(id: number): Observable<any> {
-    return this.http.get<any>(`/api/categories/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
   getCategoriesWithFilters(params: {
     name?: string;
@@ -69,7 +69,12 @@ export class CategoryService {
     page?: number;
     size?: number;
   }): Observable<any> {
-    return this.http.get('/api/rechBIen', { params });
+    // Ajout de la sérialisation des paramètres pour éviter tout problème de typage
+    const httpParams = new HttpParams({ fromObject: params as any });
+
+    // Appel API avec les paramètres
+    return this.http.get(`${this.apiUrl}/rechBIen`, { params: httpParams });
   }
+
 
 }

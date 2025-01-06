@@ -69,7 +69,7 @@ public class CategoryController {
         return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/search")
+ /*   @GetMapping("/search")
     public ResponseEntity<Page<CategoryDTO>> searchCategories(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Boolean isRoot,
@@ -120,24 +120,10 @@ public class CategoryController {
         Page<CategoryDTO> categoryDTOs = categories.map(this::convertToDTO);
 
         return ResponseEntity.ok(categoryDTOs);
-    }
+    }*/
 
-    private CategoryDTO convertToDTO(Category category) {
-        // Vérifie si la catégorie a des enfants
-        Integer childCount = (category.getChildCategories() != null) ? category.getChildCategories().size() : 0;
 
-        // Détermine si la catégorie est une catégorie racine (pas de parent)
-        boolean isRoot = category.isRootCategory();
-
-        // Crée et retourne le DTO
-        return new CategoryDTO(
-                category.getName(),
-                category.getCreationDate(),
-                childCount,
-                isRoot
-        );
-    }
-
+/*
     @GetMapping("/recherche")
     public Page<Category> searchCategories(
             @RequestParam(required = false) Boolean isRootCategory,
@@ -174,5 +160,85 @@ public class CategoryController {
 
         return categoryRepository.findAll(pageable); // Par défaut, renvoie toutes les catégories
     }
+*/
+
+
+    @GetMapping("/rechBIen")
+    public ResponseEntity<Page<CategoryDTO>> searchCategories(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Boolean isRoot,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdAfter,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate createdBefore,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam(required = false) Integer childCategoryCount,
+            @RequestParam(required = false) String sortBy, // 'name', 'date', 'childCount'
+            Pageable pageable) {
+
+        // Créer la spécification de recherche
+        Specification<Category> spec = Specification.where(null);
+
+        // Appliquer les filtres dynamiques
+        if (name != null && !name.isEmpty()) {
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+
+        if (isRoot != null) {
+            spec = spec.and((root, query, cb) -> isRoot ? cb.isNull(root.get("parentCategory")) : cb.isNotNull(root.get("parentCategory")));
+        }
+
+        if (createdAfter != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("creationDate"), createdAfter));
+        }
+
+        if (createdBefore != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("creationDate"), createdBefore));
+        }
+
+        if (startDate != null && endDate != null) {
+            spec = spec.and((root, query, cb) -> cb.between(root.get("creationDate"), startDate, endDate));
+        }
+
+        if (childCategoryCount != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(cb.size(root.get("childCategories")), childCategoryCount));
+        }
+
+        // Gérer le tri
+        Pageable sortedPageable;
+        if ("name".equals(sortBy)) {
+            sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.asc("name")));
+        } else if ("date".equals(sortBy)) {
+            sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.asc("creationDate")));
+        } else if ("childCount".equals(sortBy)) {
+            sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.asc("childCategories.size")));
+        } else {
+            sortedPageable = pageable; // Par défaut, pas de tri spécifique
+        }
+
+        // Effectuer la recherche avec les filtres et pagination
+        Page<Category> categories = categoryRepository.findAll(spec, sortedPageable);
+
+        // Convertir les entités en DTO
+        Page<CategoryDTO> categoryDTOs = categories.map(this::convertToDTO);
+
+        return ResponseEntity.ok(categoryDTOs);
+    }
+
+    private CategoryDTO convertToDTO(Category category) {
+        // Vérifie si la catégorie a des enfants
+        Integer childCount = (category.getChildCategories() != null) ? category.getChildCategories().size() : 0;
+
+        // Détermine si la catégorie est une catégorie racine (pas de parent)
+        boolean isRoot = category.isRootCategory();
+
+        // Crée et retourne le DTO
+        return new CategoryDTO(
+                category.getName(),
+                category.getCreationDate(),
+                childCount,
+                isRoot
+        );
+    }
+
 
 }

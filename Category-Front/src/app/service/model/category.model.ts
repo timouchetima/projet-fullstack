@@ -4,7 +4,10 @@ export interface Category {
   creationDate?: Date;
   parentCategory?: Category;
   childCategories?: Category[];
+  childCategoryCount?: number; // Rendre optionnel
+  isRoot?: boolean; // Rendre optionnel
 }
+
 export interface CategoryList {
   id?: number;
   name?: string;
@@ -13,3 +16,4 @@ export interface CategoryList {
   childCategories?: Category[];  // Liste des sous-catégories
   childOfItself?: boolean;  // Vérifie si la catégorie est enfant d'elle-même
 }
+

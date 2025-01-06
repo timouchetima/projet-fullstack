@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,8 @@ import { Router } from '@angular/router';
   imports: [
     FontAwesomeModule,
     DatePipe,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']

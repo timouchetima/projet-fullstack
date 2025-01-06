@@ -57,4 +57,19 @@ export class CategoryService {
   getCategoryById(id: number): Observable<any> {
     return this.http.get<any>(`/api/categories/${id}`);
   }
+  getCategoriesWithFilters(params: {
+    name?: string;
+    isRoot?: boolean;
+    createdAfter?: string;
+    createdBefore?: string;
+    startDate?: string;
+    endDate?: string;
+    childCategoryCount?: number;
+    sortBy?: string;
+    page?: number;
+    size?: number;
+  }): Observable<any> {
+    return this.http.get('/api/rechBIen', { params });
+  }
+
 }

@@ -1,16 +1,31 @@
-<h1 class="mn-3">Category</h1>
-<div class="d-flex flex-wrap">
-  <div *ngFor="let cat of allCategory$ | async" class="card mt-0 mb-4 ms-0 me-4">
-    <div class="card-body">
-      <h5 class="card-title">{{ cat.id }}</h5>
-      <h5 class="card-title">{{ cat.name }}</h5>
-      <p class="card-text">Creation Date: {{ cat.creationDate | date }}</p>
-      <p class="card-text">Parent Category: {{ cat.parentCategory?.id|| 'N/A' }}</p>
-      <p class="card-text">Is Root Category: {{ cat.parentCategory ? 'No' : 'Yes' }}</p>
+<h1 class="mb-3">Category Management</h1>
 
-      <button class="btn btn-danger" (click)="navigateToEdit(cat)">Éditer</button>
-      <button class="btn btn-danger" (click)="navigateToDetails(cat)">Detail</button>
-      <button class="btn btn-danger" (click)="cat.id ? deleteCategory(cat.id) : null">Delete</button>
-    </div>
-  </div>
+<!-- Tableau des catégories -->
+<div class="table-responsive">
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Creation Date</th>
+      <th>Parent Category</th>
+      <th>Is Root</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let cat of allCategory$ | async">
+      <td>{{ cat.id }}</td>
+      <td>{{ cat.name }}</td>
+      <td>{{ cat.creationDate | date }}</td>
+      <td>{{ cat.parentCategory?.id || 'N/A' }}</td>
+      <td>{{ cat.parentCategory ? 'No' : 'Yes' }}</td>
+      <td>
+        <button class="btn btn-primary btn-sm me-1" (click)="navigateToDetails(cat)">Details</button>
+        <button class="btn btn-warning btn-sm me-1" (click)="navigateToEdit(cat)">Edit</button>
+        <button class="btn btn-danger btn-sm" (click)="cat.id ? deleteCategory(cat.id) : null">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>
